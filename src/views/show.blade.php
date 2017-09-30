@@ -2,8 +2,15 @@
 
 @section('css')
     <style>
-        span {  width: 60px;  margin-right: 5px;  }
-        .button-custom {  width: 100px;  margin-bottom: 15px;  }
+        span {
+            width: 60px;
+            margin-right: 5px;
+        }
+
+        .button-custom {
+            width: 100px;
+            margin-bottom: 15px;
+        }
     </style>
 @endsection
 
@@ -57,30 +64,32 @@
             </div>
         </div>
 
-        <div class="box">
-            <strong>请求参数：</strong>
-            <hr>
-            <table class="table is-fullwidth is-narrow">
-                <thead>
-                <tr>
-                    <th>参数</th>
-                    <th>值</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach ($params as $key => $param)
+        @if (count($params))
+            <div class="box">
+                <strong>请求参数：</strong>
+                <hr>
+                <table class="table is-fullwidth is-narrow">
+                    <thead>
                     <tr>
-                        <td>{{ $param['param'] }}</td>
-                        <td>
-                            <input class="input" type="text" name="{{ $param['param'] }}"
-                                   value="{{ old($param['param']) }}"
-                                   placeholder="{{ $param['comment'] }}">
-                        </td>
+                        <th>参数</th>
+                        <th>值</th>
                     </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                    @foreach ($params as $key => $param)
+                        <tr>
+                            <td>{{ $param['param'] }}</td>
+                            <td>
+                                <input class="input" type="text" name="{{ $param['param'] }}"
+                                       value="{{ old($param['param']) }}"
+                                       placeholder="{{ $param['comment'] }}">
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
 
         <div class="box">
             <strong>返回结果：</strong>

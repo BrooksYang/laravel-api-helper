@@ -178,10 +178,26 @@ trait DocHelper
             $comment = explode('//', $line);
             $commentStr = trim(@$comment[1]);
 
-            $reg = '/\Input::get\(([\'\"])([^\'\"]+)(\\1).*\)/';
+            $reg = '/\$request->input\(([\'\"])([^\'\"]+)(\\1).*\)/';
             if (preg_match($reg, $line, $matches)) {
                 $params[] = [
-                    'param' => @$matches[2],
+                    'param'   => @$matches[2],
+                    'comment' => $commentStr,
+                ];
+            }
+
+            $reg = '/\$request->get\(([\'\"])([^\'\"]+)(\\1).*\)/';
+            if (preg_match($reg, $line, $matches)) {
+                $params[] = [
+                    'param'   => @$matches[2],
+                    'comment' => $commentStr,
+                ];
+            }
+
+            $reg = '/Input::get\(([\'\"])([^\'\"]+)(\\1).*\)/';
+            if (preg_match($reg, $line, $matches)) {
+                $params[] = [
+                    'param'   => @$matches[2],
                     'comment' => $commentStr,
                 ];
             }
