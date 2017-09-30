@@ -1,6 +1,6 @@
 {
     "name": "brooksyang/laravel-api-helper",
-    "description": "Api doc generator for laravel 5.5+",
+    "description": "Api doc generator for laravel 5",
     "license": "MIT",
     "authors": [
         {
