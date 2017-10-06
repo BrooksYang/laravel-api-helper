@@ -34,10 +34,10 @@ class Doc
     /**
      * 获取指定模块下的api
      *
-     * @param $module
+     * @param string $module
      * @return array
      */
-    public function api($module)
+    public function api($module = '')
     {
         $routes = $this->getRoutes();
 
@@ -51,8 +51,8 @@ class Doc
      */
     public function total()
     {
-        $total = Cache::tags("api_doc")->get('doc_for_');
+        $items = Cache::tags("api_doc")->get('doc_for_') ?: $this->api();
 
-        return count($total);
+        return count($items);
     }
 }
