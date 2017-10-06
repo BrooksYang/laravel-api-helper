@@ -30,27 +30,27 @@ CACHE_DRIVER=redis
 
 ##### 使用示例
 ```php
-    /**
-     * 这里是api标题
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        // 支持以下三种方式接收参数
-        $paramA = $request->input('param_a'); // 参数一说明
-        $paramB = $request->get('param_b'); // 参数二说明
-        $paramC = Input::get('param_c'); // 参数三说明
-        
-        // 以下是返回内容
-        return response()->json([
-            'code' => 1,
-            'msg' => 'success',
-            'data' => [
-                'test' => 'blablabla'
-            ]
-        ]);
-    }
+/**
+ * 这里是api标题
+ *
+ * @return \Illuminate\Http\Response
+ */
+public function index(Request $request)
+{
+    // 支持以下三种方式接收参数
+    $paramA = $request->input('param_a'); // 参数一说明
+    $paramB = $request->get('param_b'); // 参数二说明
+    $paramC = Input::get('param_c'); // 参数三说明
+    
+    // 以下是返回内容
+    return response()->json([
+        'code' => 1,
+        'msg' => 'success',
+        'data' => [
+            'test' => 'blablabla'
+        ]
+    ]);
+}
 ```
 
 ##### 注意
