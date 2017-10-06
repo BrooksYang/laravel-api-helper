@@ -51,4 +51,6 @@ CACHE_DRIVER=redis
 ```
 
 ##### 访问地址：
+```php
 localhost/api/docs
+```
