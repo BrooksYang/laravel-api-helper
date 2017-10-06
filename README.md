@@ -53,6 +53,12 @@ CACHE_DRIVER=redis
     }
 ```
 
+##### 注意
+该扩展包会自动生成api列表缓存，若添加了新的api，请在项目根目录下执行以下操作
+```php
+php artisan cache:clear
+```
+
 ##### 访问地址：
 ```php
 http://localhost/api/docs
