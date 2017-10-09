@@ -63,5 +63,9 @@
         }
     });
 </script>
+
+{{-- Js --}}
+@yield('Js')
+
 </body>
 </html>

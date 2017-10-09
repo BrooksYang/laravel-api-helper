@@ -63,6 +63,6 @@ class DocController extends Controller
 
         $data = $this->sendRequest($method, $url, $params);
 
-        return back()->with('params', json_encode($data, JSON_PRETTY_PRINT))->withInput();
+        return back()->with('params', json_encode($data))->withInput();
     }
 }
