@@ -19,8 +19,8 @@
         {{ csrf_field() }}
 
         {{-- request info--}}
-        <input type="hidden" name="method" value="{{ $info['method'] }}">
-        <input type="hidden" name="uri" value="{{ $info['uri'] }}">
+        <input type="hidden" name="methodForApiDoc" value="{{ $info['method'] }}">
+        <input type="hidden" name="uriForApiDoc" value="{{ $info['uri'] }}">
 
         {{-- Button --}}
         <div class="">

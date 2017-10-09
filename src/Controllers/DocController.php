@@ -55,9 +55,9 @@ class DocController extends Controller
      */
     public function send(Request $request)
     {
-        $method = $request->input('method');
-        $url = str_replace($request->path(), '', $request->url()) . $request->input('uri');
-        $params = $request->except('_token', 'method', 'uri', 'token');
+        $method = $request->input('methodForApiDoc');
+        $url = str_replace($request->path(), '', $request->url()) . $request->input('uriForApiDoc');
+        $params = $request->except('_token', 'methodForApiDoc', 'uriForApiDoc', 'token');
         $token = $request->input('tokenForApiDoc');
         $request->session()->put('tokenForApiDoc', $token);
 
