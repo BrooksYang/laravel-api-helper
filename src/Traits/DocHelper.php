@@ -15,7 +15,7 @@ trait DocHelper
      */
     protected function getRoutes()
     {
-        return Cache::tags('routes')->remember('api_doc', config('session.lifetime'), function () {
+        return Cache::tags(config('api-helper.cache_tag_prefix') . '_routes')->remember('api_doc', config('session.lifetime'), function () {
 
             $path = base_path();
 
@@ -39,7 +39,7 @@ trait DocHelper
      */
     protected function getModules($routes)
     {
-        return Cache::tags('modules')->remember('api_doc', config('session.lifetime'), function () use ($routes) {
+        return Cache::tags(config('api-helper.cache_tag_prefix') . '_modules')->remember('api_doc', config('session.lifetime'), function () use ($routes) {
 
             // 筛选 App\Http\Controllers 下的控制器
             $routes = $this->routesFilter($routes);
@@ -84,7 +84,7 @@ trait DocHelper
      */
     protected function getApiByModule($routes, $module = '')
     {
-        return Cache::tags("api_doc")->remember("doc_for_$module", config('session.lifetime'), function () use ($routes, $module) {
+        return Cache::tags(config('api-helper.cache_tag_prefix') . '_api_doc')->remember("doc_for_$module", config('session.lifetime'), function () use ($routes, $module) {
 
             // 筛选有模块的控制器
             $routes = $this->routesFilter($routes);

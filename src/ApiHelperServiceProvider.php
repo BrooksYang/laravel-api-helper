@@ -14,6 +14,11 @@ class ApiHelperServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Publish the config file
+        $this->publishes([
+            __DIR__.'/config/api-helper.php' => config_path('api-helper.php'),
+        ], 'api-doc');
+
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
 
@@ -40,6 +45,11 @@ class ApiHelperServiceProvider extends ServiceProvider
         $this->app->bind('doc', function () {
             return new Doc();
         });
+
+        // Default Package Configuration
+        $this->mergeConfigFrom(
+            __DIR__.'/config/api-helper.php', 'api-doc'
+        );
     }
 
     /**

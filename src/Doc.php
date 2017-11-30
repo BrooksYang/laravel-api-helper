@@ -51,7 +51,7 @@ class Doc
      */
     public function total()
     {
-        $items = Cache::tags("api_doc")->get('doc_for_') ?: $this->api();
+        $items = Cache::tags(config('api-helper.cache_tag_prefix') . '_api_doc')->get('doc_for_') ?: $this->api();
 
         return count($items);
     }
