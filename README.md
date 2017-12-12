@@ -16,14 +16,9 @@ composer require brooksyang/laravel-api-helper
 php artisan vendor:publish --tag=api-doc
 ```
 
-##### 配置env缓存驱动
+##### 配置env文件中缓存驱动为redis（开发阶段若不打算用缓存，则可以设置为array）
 ```php
 CACHE_DRIVER=redis
-```
-
-##### 取消 csrf 验证
-```php
-// 注释 app/Http/Kernel.php 中的 VerifyCsrfToken::class,
 ```
 
 ## 使用
