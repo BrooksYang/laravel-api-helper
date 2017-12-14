@@ -56,7 +56,7 @@ class DocController extends Controller
     public function send(Request $request)
     {
         $method = $request->input('methodForApiDoc');
-        $baseUrl = config('api-helper.api_base_url', str_replace($request->path(), '', $request->url()));
+        $baseUrl = config('api-helper.api_base_url') ?: str_replace($request->path(), '', $request->url());
         $url = $baseUrl . $request->input('uriForApiDoc');
         $params = $request->except('_token', 'methodForApiDoc', 'uriForApiDoc', 'token');
         $token = $request->input('tokenForApiDoc');
