@@ -21,6 +21,23 @@ php artisan vendor:publish --tag=api-doc
 CACHE_DRIVER=redis
 ```
 
+##### 异常处理（可选）
+在/app/Exceptions/Handler.php文件的render方法中添加以下方法进行异常处理
+```php
+    use Illuminate\Validation\ValidationException;
+    use GuzzleHttp\Exception\RequestException;
+    
+    // 表单验证异常处理
+    if ($exception instanceof ValidationException) {
+        return response()->json(['code' => 11, 'msg' => $exception->errors(), 'data' => null]);
+    }
+
+    // Guzzle 请求异常处理
+    if ($exception instanceof RequestException) {
+        return back()->with('params', $exception->getMessage())->withInput();
+    }
+```
+
 ## 使用
 
 ##### 使用示例
