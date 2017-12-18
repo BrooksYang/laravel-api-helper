@@ -2,7 +2,12 @@
 该扩展包根据路由及注释文件自动生成可视化api文档，并采用guzzlehttp进行调试
 
 ## Demo
-[点击访问](http://218.28.38.100:9001/api/docs)
+[点击访问](http://api-helper.brooksyang.cn/api/docs)
+
+## 更新说明
+```php
+v1.1.0 支持在线ApacheBench服务器压力测试
+```
 
 ## 配置
 
