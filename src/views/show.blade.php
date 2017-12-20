@@ -126,7 +126,10 @@
             <div class="box">
                 <strong>压测结果：</strong>
                 <hr>
-                <pre>{{ session('response.command') }}<hr>{{ session('response.report') }}</pre>
+                <div class="content">
+                    <p class="notification">{{ session('response.command') }}</p>
+                    <pre>{{ session('response.report') }}</pre>
+                </div>
             </div>
         @endif
     </form>

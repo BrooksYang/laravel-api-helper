@@ -59,7 +59,7 @@ class DocController extends Controller
         $method = $request->input('methodForApiDoc');
         $baseUrl = config('api-helper.api_base_url') ?: str_replace($request->path(), '', $request->url());
         $url = $baseUrl . $request->input('uriForApiDoc');
-        $params = $request->except('_token', 'methodForApiDoc', 'uriForApiDoc', 'token', 'total_requests', 'concurrency');
+        $params = $request->except('_token', 'tokenForApiDoc', 'methodForApiDoc', 'uriForApiDoc', 'token', 'total_requests', 'concurrency');
         $token = $request->input('tokenForApiDoc');
         $request->session()->put('tokenForApiDoc', $token);
 
@@ -127,7 +127,7 @@ class DocController extends Controller
             foreach ($params as $key => $param) {
                 $getParam .= "$key=$param&";
             }
-            $url = $url . rtrim($getParam, '&');
+            $url = $getParam ? $url . '?' . rtrim($getParam, '&') : $url;
         }
 
         return $url;
