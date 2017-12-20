@@ -114,6 +114,42 @@
             </table>
         </div>
 
+        {{-- 上次压测结果 --}}
+        @if (@$lastServerTestResult['requests_per_second'])
+            <div class="box">
+                <strong>上次压测结果：</strong>
+                <hr>
+                <table class="table is-fullwidth is-narrow">
+                    <tbody>
+                    <tr>
+                        <td>Requests per second</td>
+                        <td>吞吐率</td>
+                        <td>
+                            <span class="tag is-light is-rounded">{{ $lastServerTestResult['requests_per_second'] }}</span>
+                            [#/sec] (mean)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Time per request</td>
+                        <td>用户平均请求等待时间</td>
+                        <td>
+                            <span class="tag is-light is-rounded">{{ $lastServerTestResult['time_per_request'] }}</span>
+                            [ms] (mean)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Time per request</td>
+                        <td>服务器平均请求等待时间</td>
+                        <td>
+                            <span class="tag is-light is-rounded">{{ $lastServerTestResult['time_per_request_concurrent'] }}</span>
+                            [ms] (mean, across all concurrent requests)
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        @endif
+
         {{-- 返回结果 --}}
         <div class="box">
             <strong>返回结果：</strong>

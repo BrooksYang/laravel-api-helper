@@ -14,6 +14,7 @@
             <th>序号</th>
             <th>URI</th>
             <th>名称</th>
+            <th>吞吐率</th>
             <th>模块</th>
         </tr>
         </thead>
@@ -44,6 +45,9 @@
                     <a href="{{ url('api/docs/' . $item['module'] . '/' . base64_encode(json_encode($item)) ) }}">
                         {{ $item['name'] }}
                     </a>
+                </td>
+                <td>
+                    <span class="tag is-light is-rounded">{{ @$item['last_server_test_result']['requests_per_second'] }}</span>
                 </td>
                 <td>{{ $item['module'] }}</td>
             </tr>
