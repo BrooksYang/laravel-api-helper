@@ -47,7 +47,9 @@
                     </a>
                 </td>
                 <td>
-                    <span class="tag is-light is-rounded">{{ @$item['last_server_test_result']['requests_per_second'] }}</span>
+                    @if (@$item['last_server_test_result']['requests_per_second'])
+                        <span class="tag is-light is-rounded">{{ @$item['last_server_test_result']['requests_per_second'] }}</span>
+                    @endif
                 </td>
                 <td>{{ $item['module'] }}</td>
             </tr>
