@@ -1,8 +1,16 @@
-##### 说明
-该扩展包根据路由及注释文件自动生成可视化api文档，并采用guzzlehttp进行调试
+## 介绍
+该项目是基于Laravel 5.5的API文档生成工具，根据laravel路由及注释文件生成可视化api文档，并采用guzzlehttp进行调试。
 
 ## Demo
 [点击访问](http://api-helper.brooksyang.cn/api/docs)
+
+## 项目依赖
+|   依赖包    |   版本  |
+|   :---     | :----: |
+|    PHP     |  >=7.0 |
+|   Laravel  |  >=5.5 |
+|   predis   |  >=1.1 |
+| Guzzlehttp |  >=6.3 |
 
 ## 更新说明
 ```php
@@ -13,24 +21,38 @@ v1.1.1 Guzzle 请求异常处理
 v1.1.0 支持在线ApacheBench服务器压力测试，并缓存最近一次压测结果，在接口列表及详情页展示
 ```
 
-## 配置
-
-##### 安装
+## 安装
 ```php
 composer require brooksyang/laravel-api-helper
 ```
 
-##### 打印css资源
+## 配置
+打印配置文件，及css资源，该命令将生成config/api-helper.php，及/public/vendor/api_doc/css/bulma.css文件
 ```php
 php artisan vendor:publish --tag=api-doc
 ```
 
-##### 配置env文件中缓存驱动为redis（开发阶段若不打算用缓存，则可以设置为array）
+api-helper.php 配置项说明
+```php
+cache_tag_prefix // 缓存前缀，默认为api_helper，建议不同项目设置不同前缀以防止冲突
+
+cache_ttl // 缓存时长，默认120分钟，可根据项目需求自行设置
+
+api_base_url // 接口请求基础地址，默认为当前<host_name>，一般情况下不需要配置，若存在内外网不通的情况，可设置为相应内网地址
+```
+
+## 设置缓存驱动
+修改 .env 文件，将缓存驱动设置为redis（推荐）
 ```php
 CACHE_DRIVER=redis
 ```
 
-##### 异常处理（可选）
+若本机没有安装redis，可暂时设置为array
+```php
+CACHE_DRIVER=array
+```
+
+## 异常处理（推荐）
 在/app/Exceptions/Handler.php文件的render方法中添加以下方法进行异常处理
 ```php
 // 表单验证异常处理
@@ -39,9 +61,7 @@ if ($exception instanceof \Illuminate\Validation\ValidationException) {
 }
 ```
 
-## 使用
-
-##### 使用示例
+## 使用示例
 ```php
 use BrooksYang\LaravelApiHelper\Traits\ResponseHelper;
 
@@ -64,13 +84,17 @@ public function index(Request $request)
 }
 ```
 
-##### 注意
-该扩展包会自动生成api列表缓存，若添加了新的api，请在项目根目录下执行以下操作
+## 注意
+若设置了redis驱动，添加了新的api之后，需执行清除缓存操作（若缓存驱动为array，则跳过该步骤）
 ```php
 php artisan cache:clear
 ```
 
-##### 访问地址：
+## 访问地址
 ```php
-http://localhost/api/docs
+http://<HOST_NAME>/api/docs
 ```
+
+## TODO LIST
+- [ ] 返回参数自动生成文档
+- [ ] v2.0版本考虑引入 JWT，作为默认用户认证
