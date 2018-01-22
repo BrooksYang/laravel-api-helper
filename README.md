@@ -43,6 +43,8 @@ if ($exception instanceof \Illuminate\Validation\ValidationException) {
 
 ##### 使用示例
 ```php
+use BrooksYang\LaravelApiHelper\Traits\ResponseHelper;
+
 /**
  * 这里是api标题
  *
@@ -55,14 +57,10 @@ public function index(Request $request)
     $paramB = $request->get('param_b'); // 参数二说明
     $paramC = Input::get('param_c'); // 参数三说明
     
-    // 以下是返回内容
-    return response()->json([
-        'code' => 1,
-        'msg' => 'success',
-        'data' => [
-            'test' => 'blablabla'
-        ]
-    ]);
+    // 以下是返回内容，ResponseHelper封装了三种返回方法，不强制使用，可自定义返回数据结构
+    return $this->jsonResponse(['test' => 'blablabla'], '操作成功'); // 方式一，操作成功，返回数据及提示信息
+    return $this->errorResponse(['code' => 'xxx', 'msg' => '操作失败']); // 方式二，操作失败，返回错误码及错误消息
+    return $this->msgResponse('操作成功'); // 方式三，操作成功，仅返回成功提示消息
 }
 ```
 
