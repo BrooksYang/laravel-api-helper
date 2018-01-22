@@ -6,6 +6,8 @@
 
 ## 更新说明
 ```php
+v1.1.1 Guzzle 请求异常处理
+
 v1.1.0 支持在线ApacheBench服务器压力测试，并缓存最近一次压测结果，在接口列表及详情页展示
 ```
 
@@ -35,11 +37,6 @@ CACHE_DRIVER=redis
     // 表单验证异常处理
     if ($exception instanceof ValidationException) {
         return response()->json(['code' => 11, 'msg' => $exception->errors(), 'data' => null]);
-    }
-
-    // Guzzle 请求异常处理
-    if ($exception instanceof RequestException) {
-        return back()->with('params', $exception->getMessage())->withInput();
     }
 ```
 

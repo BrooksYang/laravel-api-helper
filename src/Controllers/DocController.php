@@ -79,11 +79,12 @@ class DocController extends Controller
 
         // 发送请求
         $data = $this->sendRequest($method, $url, $params);
+        $data = $data['code'] ? $data['msg'] : json_decode($data);
 
         // 压力测试
         $response = $this->serverTest($request, $params, $method, $url, $token);
 
-        return back()->with('params', json_encode($data))
+        return back()->with('params', $data)
             ->with('response', $response)
             ->withInput();
     }

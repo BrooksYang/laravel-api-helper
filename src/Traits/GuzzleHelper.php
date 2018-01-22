@@ -3,6 +3,8 @@
 namespace BrooksYang\LaravelApiHelper\Traits;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Arr;
 
 trait GuzzleHelper
 {
@@ -21,11 +23,11 @@ trait GuzzleHelper
 
         // 发送请求
         $client = new Client(['headers' => ['Authorization' => "Bearer $token"]]);
-        $response = $client->request($method, $url, ['json' => $param, 'verify' => false]);
-
-        // 请求状态异常处理
-        $code = $response->getStatusCode();
-        if ($code != 200) abort($code);
+        try {
+            $response = $client->request($method, $url, ['json' => $param, 'verify' => false]);
+        } catch (RequestException $exception) {
+            return ['code' => $exception->getCode(), 'msg' => $exception->getMessage()];
+        }
 
         // 返回数据
         return json_decode((string)$response->getBody(), true);
