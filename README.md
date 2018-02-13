@@ -74,10 +74,13 @@ use BrooksYang\LaravelApiHelper\Traits\ResponseHelper;
  */
 public function index(Request $request)
 {
-    // 支持以下三种方式接收参数
+    // 支持以下三种方式接收表单参数
     $paramA = $request->input('param_a'); // 参数一说明
     $paramB = $request->get('param_b'); // 参数二说明
     $paramC = Input::get('param_c'); // 参数三说明
+    
+    // 支持接收表单文件（v1.3.0新增）
+    $file = $request->file('upload_file');
     
     // 以下是返回内容，ResponseHelper封装了三种返回方法，不强制使用，可自定义返回数据结构
     return $this->jsonResponse(['test' => 'blablabla'], '操作成功'); // 方式一，操作成功，返回数据及提示信息
