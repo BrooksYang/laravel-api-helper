@@ -14,6 +14,8 @@
 
 ## 更新说明
 ```php
+v1.3.0 表单支持文件上传
+
 v1.2.0 新增ResponseHelper Trait，封装常用api返回方法
 
 v1.1.1 Guzzle 请求异常处理

@@ -201,6 +201,15 @@ trait DocHelper
                     'comment' => $commentStr,
                 ];
             }
+
+            $reg = '/\$request->file\(([\'\"])([^\'\"]+)(\\1).*\)/';
+            if (preg_match($reg, $line, $matches)) {
+                $params[] = [
+                    'param'   => @$matches[2],
+                    'comment' => $commentStr,
+                    'is_file' => 1,
+                ];
+            }
         }
 
         return $params;

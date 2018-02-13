@@ -15,7 +15,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ url('api/send') }}" method="POST">
+    <form action="{{ url('api/send') }}" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
 
         {{-- request info--}}
@@ -81,9 +81,22 @@
                         <tr>
                             <td>{{ $param['param'] }}</td>
                             <td>
-                                <input class="input" type="text" name="{{ $param['param'] }}"
-                                       value="{{ old($param['param']) }}"
-                                       placeholder="{{ $param['comment'] }}">
+                                @if (isset($param['is_file']))
+                                    <div class="file has-name is-fullwidth">
+                                        <label class="file-label">
+                                            <input class="file-input" type="file" name="{{ $param['param'] }}"
+                                                   id="beingUploadFileInput" onchange="handleFileName(this.value)">
+                                            <div class="file-cta">
+                                                <div class="file-label">选择文件</div>
+                                            </div>
+                                            <div class="file-name" id="beingUploadFilename"></div>
+                                        </label>
+                                    </div>
+                                @else
+                                    <input class="input" type="text" name="{{ $param['param'] }}"
+                                           value="{{ old($param['param']) }}"
+                                           placeholder="{{ $param['comment'] }}">
+                                @endif
                             </td>
                         </tr>
                     @endforeach
@@ -173,10 +186,21 @@
 
 @section('Js')
     <script>
+
+        /**
+         * 压力文件上传显示文件名测试
+         */
+        function handleFileName(filename) {
+            let fileName = document.getElementById("beingUploadFilename");
+            fileName.innerHTML = filename;
+        }
+
         // 格式化json
         if (window["JSON"] && JSON["stringify"]) {
-            var code = document.getElementById("code");
-            code.innerHTML = JSON.stringify(JSON.parse(code.innerHTML), undefined, 2);
+            let code = document.getElementById("code");
+            if (code.innerHTML) {
+                code.innerHTML = JSON.stringify(JSON.parse(code.innerHTML), undefined, 2);
+            }
         }
 
         /**

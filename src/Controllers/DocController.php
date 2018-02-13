@@ -77,13 +77,21 @@ class DocController extends Controller
         $token = $request->input('tokenForApiDoc');
         $request->session()->put('tokenForApiDoc', $token);
 
+        // 判断是否为Multipart请求
+        $hasFile = $request->allFiles();
+
         // 发送请求
-        $data = $this->sendRequest($method, $url, $params);
+        if (!empty($hasFile)) {
+            $data = $this->sendMultipartRequest($method, $url, $params);
+        } else {
+            $data = $this->sendRequest($method, $url, $params);
+        }
+        $data = @$data['error'] == 'GUZZLE_EXCEPTION' ? $data['msg'] : json_encode($data);
 
         // 压力测试
         $response = $this->serverTest($request, $params, $method, $url, $token);
 
-        return back()->with('params', json_encode($data))
+        return back()->with('params', $data)
             ->with('response', $response)
             ->withInput();
     }
