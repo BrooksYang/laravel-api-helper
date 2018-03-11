@@ -11,6 +11,14 @@
             width: 100px;
             margin-bottom: 15px;
         }
+
+        /* pre content wrap */
+        pre {
+            white-space: pre-wrap!important; /* css-3 */
+            word-wrap: break-word!important; /* InternetExplorer5.5+ */
+            white-space: -moz-pre-wrap!important; /* Mozilla,since1999 */
+            white-space: -o-pre-wrap!important; /* Opera7 */
+        }
     </style>
 @endsection
 
@@ -167,7 +175,9 @@
         <div class="box">
             <strong>返回结果：</strong>
             <hr>
-            <pre><div id="code">{{ session('params') }}</div></pre>
+            <div class="content">
+                <pre><span id="code">{{ session('params') }}</span></pre>
+            </div>
         </div>
 
         {{-- 压力测试结果 --}}
@@ -176,8 +186,7 @@
                 <strong>压测结果：</strong>
                 <hr>
                 <div class="content">
-                    <p class="notification">{{ session('response.command') }}</p>
-                    <pre>{{ session('response.report') }}</pre>
+                    <pre>{{ session('response.command') }}<hr>{{ session('response.report') }}</pre>
                 </div>
             </div>
         @endif
