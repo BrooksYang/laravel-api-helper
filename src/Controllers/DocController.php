@@ -71,8 +71,8 @@ class DocController extends Controller
     public function send(Request $request)
     {
         $method = $request->input('methodForApiDoc');
-        $baseUrl = config('api-helper.api_base_url') ?: str_replace($request->path(), '', $request->url());
-        $url = $baseUrl . $request->input('uriForApiDoc');
+        $baseUrl = trim(config('api-helper.api_base_url'), '/') ?: url('/');
+        $url = $baseUrl . '/' . $request->input('uriForApiDoc');
         $params = $request->except('_token', 'tokenForApiDoc', 'methodForApiDoc', 'uriForApiDoc', 'token', 'total_requests', 'concurrency');
         $token = $request->input('tokenForApiDoc');
         $request->session()->put('tokenForApiDoc', $token);
@@ -125,6 +125,13 @@ class DocController extends Controller
 
         // 执行压力测试
         $command = "ab -n $totalRequests -c $concurrency {$postParam}{$token}$url";
+
+        // 判断命令是否合法
+        if (escapeshellcmd($token) != $token) {
+            $report = '存在非法字符，已中断测试！';
+            return compact('command', 'report', 'postParam');
+        }
+
         exec($command, $report);
 
         // 缓存测试结果
@@ -137,7 +144,7 @@ class DocController extends Controller
         $errorMessage = "压力测试模块（ApacheBench）未安装，请执行以下命令安装：\n\napt-get install apache2-utils";
         $report = $report ?: $errorMessage;
 
-        return compact('command', 'report', 'jsonParam');
+        return compact('command', 'report', 'postParam');
     }
 
     /**
