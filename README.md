@@ -45,6 +45,8 @@ cache_tag_prefix // 缓存前缀，默认为api_helper，建议不同项目设�
 cache_ttl // 缓存时长，默认120分钟，可根据项目需求自行设置
 
 api_base_url // 接口请求基础地址，默认为当前<host_name>，一般情况下不需要配置，若存在内外网不通的情况，可设置为相应内网地址
+
+namespaces // Api文档生成生效命名空间，数组，默认仅包含 App\Http\Controllers
 ```
 
 ## 设置缓存驱动
