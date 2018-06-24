@@ -1,6 +1,15 @@
 <?php
 
-Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'BrooksYang\LaravelApiHelper\Controllers'], function () {
+/*
+|--------------------------------------------------------------------------
+| ApiDocGenerator Routes
+|--------------------------------------------------------------------------
+|
+| Here is the ApiDocGenerator routes for your application.
+|
+*/
+
+Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'BrooksYang\LaravelApiHelper\Controllers\Doc'], function () {
 
     // api主页
     Route::get('docs/{module?}', 'DocController@index');

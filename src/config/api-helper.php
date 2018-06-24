@@ -10,4 +10,9 @@ return [
 
     // Api Base Url
     'api_base_url'     => env('API_BASE_URL'),
+
+    // Available Namespaces
+    'namespaces'       => [
+        'App\Http\Controllers',
+    ],
 ];

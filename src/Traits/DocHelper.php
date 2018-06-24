@@ -9,6 +9,13 @@ use ReflectionClass;
 trait DocHelper
 {
     /**
+     * api文档namespace
+     *
+     * @var string
+     */
+    private $docNamespace = 'BrooksYang\LaravelApiHelper\Controllers\Doc';
+
+    /**
      * 获取路由
      *
      * @return mixed
@@ -20,7 +27,12 @@ trait DocHelper
             $path = base_path();
 
             // 获取api路由
-            exec("php $path/artisan route:list|grep -E 'App'|awk '{print $3\":\"$5\":\"$8\":\"$9}'", $routes);
+            exec("php $path/artisan route:list|grep -E '@'|awk '{print $3\":\"$5\":\"$8\":\"$9}'", $routes);
+
+            // 排除api文档namespace
+            $routes = array_filter($routes, function ($item) {
+                return strpos($item, $this->docNamespace) === false;
+            });
 
             // 处理数据
             $routes = array_map(function ($item) {
@@ -41,7 +53,7 @@ trait DocHelper
     {
         return Cache::tags(config('api-helper.cache_tag_prefix') . '_modules')->remember('api_doc', config('session.lifetime'), function () use ($routes) {
 
-            // 筛选 App\Http\Controllers 下的控制器
+            // 筛选有模块的控制器
             $routes = $this->routesFilter($routes);
 
             $modules = [];
@@ -51,7 +63,7 @@ trait DocHelper
 
                 $module = $this->getModule($attr[2]);
 
-                if (!in_array($module, $modules)) {
+                if (!empty($module) && !in_array($module, $modules)) {
                     array_unshift($modules, $module);
                 }
             }
@@ -68,9 +80,31 @@ trait DocHelper
      */
     protected function getModule($controller)
     {
-        // 获取模块
-        $controller = str_replace('App\Http\Controllers\\', '', $controller);
-        $module = Arr::first(explode('\\', $controller));
+        // 获取待生成文档的命名空间
+        $namespaces = config('api-helper.namespaces', ['App\Http\Controllers']);
+
+        $module = '';
+
+        // 筛选命名空间
+        foreach ($namespaces as $namespace) {
+            $namespace = rtrim($namespace, '\\') . '\\';
+
+            // 若不在namespace中，跳过
+            if (strpos($controller, $namespace) === false) {
+                continue;
+            }
+
+            // 以该namespace下第一级文件夹名称作为模块名
+            $controller = str_replace($namespace, '', $controller);
+            $module = Arr::first(explode('\\', $controller));
+
+            // 若模块下没有文件夹，则以namespace最后一位作为模块名
+            if (strpos($module, 'Controller@') !== false) {
+                $module = Arr::last(explode('\\', rtrim($namespace, '\\')));
+            }
+
+            break;
+        }
 
         return $module;
     }
@@ -93,6 +127,23 @@ trait DocHelper
             if ($module) {
                 $routes = array_filter($routes, function ($item) use ($module) {
                     return in_array($module, explode('\\', $item));
+                });
+            }
+
+            // 全部模块（namespaces中）
+            $namespaces = config('api-helper.namespaces', ['App\Http\Controllers']);
+            if (empty($module)) {
+                $routes = array_filter($routes, function ($item) use ($namespaces) {
+                    $flag = false;
+
+                    foreach ($namespaces as $namespace) {
+                        if (strpos($item, $namespace) !== false) {
+                            $flag = true;
+                            break;
+                        }
+                    }
+
+                    return $flag;
                 });
             }
 

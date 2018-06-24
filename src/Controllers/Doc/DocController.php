@@ -1,6 +1,6 @@
 <?php
 
-namespace BrooksYang\LaravelApiHelper\Controllers;
+namespace BrooksYang\LaravelApiHelper\Controllers\Doc;
 
 use BrooksYang\LaravelApiHelper\Facades\Doc;
 use BrooksYang\LaravelApiHelper\Traits\DocHelper;
