@@ -48,7 +48,7 @@ class ApiHelperServiceProvider extends ServiceProvider
 
         // Default Package Configuration
         $this->mergeConfigFrom(
-            __DIR__.'/config/api-helper.php', 'api-doc'
+            __DIR__.'/config/api-helper.php', 'api-helper'
         );
     }
 
