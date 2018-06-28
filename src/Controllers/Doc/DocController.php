@@ -18,12 +18,13 @@ class DocController extends Controller
     /**
      * api 列表
      *
+     * @param $group
      * @param $module
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($module = '')
+    public function index($group = '', $module = '')
     {
-        $items = Doc::api($module);
+        $items = Doc::api($group, $module);
 
         // 获取上次压测结果
         $prefix = config('api-helper.cache_tag_prefix');
@@ -38,11 +39,12 @@ class DocController extends Controller
     /**
      * 获取api详情
      *
+     * @param $group
      * @param $module
      * @param $api
      * @return mixed
      */
-    public function show($module, $api)
+    public function show($group, $module, $api)
     {
         $api = json_decode(base64_decode($api));
 
@@ -59,7 +61,7 @@ class DocController extends Controller
         $key = $info['method'] . '_' . str_replace('/', '_', $info['uri']);
         $lastServerTestResult = Cache::tags($prefix . '_server_test')->get($key);
 
-        return view('api_doc::show', compact('info', 'params', 'module', 'lastServerTestResult'));
+        return view('api_doc::show', compact('info', 'params', 'group', 'module', 'lastServerTestResult'));
     }
 
     /**

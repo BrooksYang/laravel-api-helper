@@ -22,7 +22,7 @@ trait DocHelper
      */
     protected function getRoutes()
     {
-        return Cache::tags(config('api-helper.cache_tag_prefix') . '_routes')->remember('api_doc', config('session.lifetime'), function () {
+        return Cache::tags(config('api-helper.cache_tag_prefix') . '_routes')->remember('api_doc', config('api-helper.cache_ttl'), function () {
 
             $path = base_path();
 
@@ -51,7 +51,7 @@ trait DocHelper
      */
     protected function getModules($routes)
     {
-        return Cache::tags(config('api-helper.cache_tag_prefix') . '_modules')->remember('api_doc', config('session.lifetime'), function () use ($routes) {
+        return Cache::tags(config('api-helper.cache_tag_prefix') . '_modules')->remember('api_doc', config('api-helper.cache_ttl'), function () use ($routes) {
 
             // 筛选有模块的控制器
             $routes = $this->routesFilter($routes);
@@ -68,6 +68,9 @@ trait DocHelper
                 }
             }
 
+            // 分组
+            $modules = collect($modules)->groupBy('group')->toArray();
+
             return $modules;
         });
     }
@@ -83,10 +86,10 @@ trait DocHelper
         // 获取待生成文档的命名空间
         $namespaces = config('api-helper.namespaces', ['App\Http\Controllers']);
 
-        $module = '';
+        $module = ['group' => '', 'module' => ''];
 
         // 筛选命名空间
-        foreach ($namespaces as $namespace) {
+        foreach ($namespaces as $group => $namespace) {
             $namespace = rtrim($namespace, '\\') . '\\';
 
             // 若不在namespace中，跳过
@@ -94,14 +97,12 @@ trait DocHelper
                 continue;
             }
 
-            // 以该namespace下第一级文件夹名称作为模块名
+            // 获取控制器
             $controller = str_replace($namespace, '', $controller);
-            $module = Arr::first(explode('\\', $controller));
 
-            // 若模块下没有文件夹，则以namespace最后一位作为模块名
-            if (strpos($module, 'Controller@') !== false) {
-                $module = Arr::last(explode('\\', rtrim($namespace, '\\')));
-            }
+            // 获取module信息
+            $module['group'] = $group;
+            $module['module'] = Arr::first(explode('\\', $controller));
 
             break;
         }
@@ -110,25 +111,19 @@ trait DocHelper
     }
 
     /**
-     * 获取指定模块下的api
+     * 获取指定命名空间下的api
      *
      * @param        $routes
+     * @param string $group
      * @param string $module
      * @return array
      */
-    protected function getApiByModule($routes, $module = '')
+    protected function getApiByModule($routes, $group = '', $module = '')
     {
-        return Cache::tags(config('api-helper.cache_tag_prefix') . '_api_doc')->remember("doc_for_$module", config('session.lifetime'), function () use ($routes, $module) {
+        return Cache::tags(config('api-helper.cache_tag_prefix') . '_api_doc')->remember("doc_for_{$group}_{$module}", config('api-helper.cache_ttl'), function () use ($routes, $group, $module) {
 
-            // 筛选有模块的控制器
-            $routes = $this->routesFilter($routes);
-
-            // 筛选指定模块下的控制器
-            if ($module) {
-                $routes = array_filter($routes, function ($item) use ($module) {
-                    return in_array($module, explode('\\', $item));
-                });
-            }
+            // 筛选路由
+            $routes = $this->routesFilter($routes, $group, $module);
 
             // 获取api信息
             $data = [];
@@ -160,7 +155,8 @@ trait DocHelper
             'uri'        => $attr[1],
             'controller' => $route[0],
             'action'     => $route[1],
-            'module'     => $module,
+            'group'      => $module['group'],
+            'module'     => $module['module'],
         ];
 
         return $api;
@@ -253,28 +249,43 @@ trait DocHelper
      * 筛选指定命名空间下的控制器
      *
      * @param $routes
+     * @param $group
+     * @param $module
      * @return array
      */
-    private function routesFilter($routes)
+    private function routesFilter($routes, $group = '', $module = '')
     {
         // 获取指定命名空间
         $namespaces = config('api-helper.namespaces', ['App\Http\Controllers']);
 
-        // 根据命名空间筛选路由
-        $routes = array_filter($routes, function ($item) use ($namespaces) {
+        // 筛选Group（Namespace）
+        if ($group) {
+            $namespaces = @$namespaces[$group] ? [$group => $namespaces[$group]] : [];
+        }
+
+        // 筛选路由
+        $routes = array_filter($routes, function ($item) use ($namespaces, $group, $module) {
+
             $flag = false;
 
             foreach ($namespaces as $namespace) {
+                // 若不在指定命名空间下，跳过
+                if (strpos($item, $namespace) === false) {
+                    continue;
+                }
+
                 $namespace = rtrim($namespace, '\\') . '\\';
 
                 // 获取控制器
                 $controller = Arr::last(explode($namespace, $item));
 
-                // 指定命名空间，且包含子命名空间（下层存在文件夹）
-                if (strpos($item, $namespace) !== false && strpos($controller, '\\') !== false) {
-                    $flag = true;
-                    break;
+                // 筛选module
+                if ($module && strpos($controller, $module . '\\') === false) {
+                    continue;
                 }
+
+                $flag = true;
+                break;
             }
 
             return $flag;

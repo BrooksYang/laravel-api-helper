@@ -11,8 +11,8 @@ return [
     // Api Base Url
     'api_base_url'     => env('API_BASE_URL'),
 
-    // Available Namespaces
+    // Available Namespaces（key: group, value: namespace）
     'namespaces'       => [
-        'App\Http\Controllers',
+        'App' => 'App\Http\Controllers',
     ],
 ];

@@ -15,7 +15,10 @@
             <th>URI</th>
             <th>名称</th>
             <th>吞吐率</th>
-            <th>模块</th>
+            @if (!Request::route()->parameter('module'))
+                <th>板块</th>
+                <th>模块</th>
+            @endif
         </tr>
         </thead>
         <tbody>
@@ -35,14 +38,14 @@
                     @endif
 
                     {{-- URI --}}
-                    <a href="{{ url('api/docs/' . $item['module'] . '/' . base64_encode(json_encode($item)) ) }}">
+                    <a href="{{ url("api/docs/{$item['group']}/{$item['module']}/" . base64_encode(json_encode($item)) ) }}">
                         {{ $item['uri'] }}
                     </a>
                 </td>
 
                 <td>
                     {{-- name --}}
-                    <a href="{{ url('api/docs/' . $item['module'] . '/' . base64_encode(json_encode($item)) ) }}">
+                    <a href="{{ url("api/docs/{$item['group']}/{$item['module']}/" . base64_encode(json_encode($item)) ) }}">
                         {{ $item['name'] }}
                     </a>
                 </td>
@@ -51,7 +54,10 @@
                         <span class="tag is-light is-rounded">{{ @$item['last_server_test_result']['requests_per_second'] }}</span>
                     @endif
                 </td>
-                <td>{{ $item['module'] }}</td>
+                @if (!Request::route()->parameter('module'))
+                    <td>{{ $item['group'] }}</td>
+                    <td>{{ $item['module'] }}</td>
+                @endif
             </tr>
         @endforeach
         </tbody>

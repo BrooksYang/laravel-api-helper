@@ -14,9 +14,11 @@
 
 ## 更新说明
 ```php
+v1.4.2 新增模块分组功能，以区分不同命名空间下的重名文件夹
+
 v1.4.1 修复api-helper配置文件的bug
 
-v1.4.0 可配置文档生成的命名空间，向下兼容v1.3，默认命名空间为App\Http\Controllers
+v1.4.0 可指定文档生成的命名空间，向下兼容v1.3，默认命名空间为App\Http\Controllers
 
 v1.3.2 压力测试安全机制优化
 
@@ -48,8 +50,9 @@ cache_ttl // 缓存时长，默认120分钟，可根据项目需求自行设置
 
 api_base_url // 接口请求基础地址，默认为当前<host_name>，一般情况下不需要配置，若存在内外网不通的情况，可设置为相应内网地址
 
-namespaces // Api文档生成生效命名空间，数组，默认仅包含 App\Http\Controllers
+namespaces // 指定生成Api文档命名空间，数组，key为group，value为namespace
 ```
+注意：请确保命名空间下存在子命名空间，否则将被忽略，子命名空间将作为模块名，如App\Http\Controllers\Demo，则模块名为Demo
 
 ## 设置缓存驱动
 修改 .env 文件，将缓存驱动设置为redis（推荐）

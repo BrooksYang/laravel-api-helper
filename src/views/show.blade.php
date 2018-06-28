@@ -32,7 +32,7 @@
 
         {{-- Button --}}
         <div class="">
-            <a href="{{ url("api/docs/$module") }}" class="button button-custom">接口列表</a>
+            <a href="{{ url("api/docs/{$group}/{$module}") }}" class="button button-custom">接口列表</a>
             <button class="button is-outlined is-primary button-custom" type="submit">测试</button>
             <button class="button is-outlined is-danger button-custom" type="submit" onclick="serverTest()">压测</button>
         </div>

@@ -27,21 +27,23 @@ class Doc
     public function modules()
     {
         $routes = $this->getRoutes();
+        $modules = $this->getModules($routes);
 
-        return $this->getModules($routes);
+        return $modules;
     }
 
     /**
      * 获取指定模块下的api
      *
+     * @param string $group
      * @param string $module
      * @return array
      */
-    public function api($module = '')
+    public function api($group = '', $module = '')
     {
         $routes = $this->getRoutes();
 
-        return $this->getApiByModule($routes, $module);
+        return $this->getApiByModule($routes, $group, $module);
     }
 
     /**
