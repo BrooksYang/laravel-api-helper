@@ -130,23 +130,6 @@ trait DocHelper
                 });
             }
 
-            // 全部模块（namespaces中）
-            $namespaces = config('api-helper.namespaces', ['App\Http\Controllers']);
-            if (empty($module)) {
-                $routes = array_filter($routes, function ($item) use ($namespaces) {
-                    $flag = false;
-
-                    foreach ($namespaces as $namespace) {
-                        if (strpos($item, $namespace) !== false) {
-                            $flag = true;
-                            break;
-                        }
-                    }
-
-                    return $flag;
-                });
-            }
-
             // 获取api信息
             $data = [];
             foreach ($routes as $route) {
@@ -267,15 +250,34 @@ trait DocHelper
     }
 
     /**
-     * 筛选有模块的控制器
+     * 筛选指定命名空间下的控制器
      *
      * @param $routes
      * @return array
      */
     private function routesFilter($routes)
     {
-        $routes = array_filter($routes, function ($item) {
-            return substr_count($item, '\\') > 3;
+        // 获取指定命名空间
+        $namespaces = config('api-helper.namespaces', ['App\Http\Controllers']);
+
+        // 根据命名空间筛选路由
+        $routes = array_filter($routes, function ($item) use ($namespaces) {
+            $flag = false;
+
+            foreach ($namespaces as $namespace) {
+                $namespace = rtrim($namespace, '\\') . '\\';
+
+                // 获取控制器
+                $controller = Arr::last(explode($namespace, $item));
+
+                // 指定命名空间，且包含子命名空间（下层存在文件夹）
+                if (strpos($item, $namespace) !== false && strpos($controller, '\\') !== false) {
+                    $flag = true;
+                    break;
+                }
+            }
+
+            return $flag;
         });
 
         return $routes;
