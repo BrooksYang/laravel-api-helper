@@ -269,17 +269,23 @@ trait DocHelper
             $flag = false;
 
             foreach ($namespaces as $namespace) {
+
+                $namespace = rtrim($namespace, '\\') . '\\';
+
                 // 若不在指定命名空间下，跳过
                 if (strpos($item, $namespace) === false) {
                     continue;
                 }
 
-                $namespace = rtrim($namespace, '\\') . '\\';
-
                 // 获取控制器
                 $controller = Arr::last(explode($namespace, $item));
 
-                // 筛选module
+                // 若不包含次级命名空间，跳过
+                if (strpos($controller, '\\') === false) {
+                    continue;
+                }
+
+                // 筛选 module
                 if ($module && strpos($controller, $module . '\\') === false) {
                     continue;
                 }

@@ -12,8 +12,11 @@
 |   predis   |  >=1.1 |
 | Guzzlehttp |  >=6.3 |
 
-## 更新说明
+## 更新日志
+
 ```php
+v1.4.3 模块分组Bug修复
+
 v1.4.2 新增模块分组功能，以区分不同命名空间下的重名文件夹
 
 v1.4.1 修复api-helper配置文件的bug
@@ -50,9 +53,36 @@ cache_ttl // 缓存时长，默认120分钟，可根据项目需求自行设置
 
 api_base_url // 接口请求基础地址，默认为当前<host_name>，一般情况下不需要配置，若存在内外网不通的情况，可设置为相应内网地址
 
-namespaces // 指定生成Api文档命名空间，数组，key为group，value为namespace
+namespaces // 指定生成Api文档命名空间，数组，key为group，value为namespace，请确保namspace之间没有交集，否则小集合将被忽略
 ```
-注意：请确保命名空间下存在子命名空间，否则将被忽略，子命名空间将作为模块名，如App\Http\Controllers\Demo，则模块名为Demo
+注意：请确保所配置的命名空间下存在次级命名空间，否则将被忽略，次级命名空间将作为模块名，更深层次命名空间与次级命名空间同级，例：
+
+namespaces 配置示例
+```php
+namespaces => [
+    'App'  => 'App\Http\Controllers', // 生效
+    'Test' => 'App\Http\Controllers\Test', // 无效
+    'Api'  => 'Api\Controllers' // 生效
+];
+```
+该配置中，「App」包含「Test」，「App」与「Api」同级，所以「Test」被忽略
+
+代码目录结构
+```php
+|--app
+    |--Http
+        |--Controllers
+            |--TestController // 无效
+            |--Demo
+                |--DemoController // 生效
+                |--Deep
+                    |--DeepController // 生效，与DemoController 同级
+|--Api
+    |--Controllers
+        |--Xxx
+            |--XxxController // 生效
+```
+以上配置，TestController被忽略，DemoController 生效，DeepController与DemoController同级生效，XxxController生效
 
 ## 设置缓存驱动
 修改 .env 文件，将缓存驱动设置为redis（推荐）
