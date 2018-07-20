@@ -26,7 +26,7 @@
 
     <div class="columns" style="position: relative; top: 80px;">
         {{-- Menu --}}
-        <div class="column is-2" style="position: fixed; height: 1000px; overflow: scroll;">
+        <div class="column is-2" style="position: fixed; height: 85%; overflow: scroll;">
             @include('api_doc::layouts.includes.menu')
         </div>
 
