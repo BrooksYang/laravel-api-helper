@@ -7,4 +7,4 @@ php:
 before_script:
   - composer install
 
-script: ./vendor/bin/phpunit -c phpunit.xml
+script: phpunit -c phpunit.xml
