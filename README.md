@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/BrooksYang/laravel-api-helper.svg?branch=master)](https://travis-ci.org/BrooksYang/laravel-api-helper)
-![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
+[![Software License][ico-license]](LICENSE)
+
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
 ## 介绍
 该项目是基于Laravel 5.5的API文档生成工具，根据laravel路由及注释文件生成可视化api文档，并采用guzzlehttp进行调试。
