@@ -34,7 +34,9 @@
         <div class="">
             <a href="{{ url("api/docs/{$group}/{$module}") }}" class="button button-custom">接口列表</a>
             <button class="button is-outlined is-primary button-custom" type="submit">测试</button>
-            <button class="button is-outlined is-danger button-custom" type="submit" onclick="serverTest()">压测</button>
+            @if ($pressureTest)
+                <button class="button is-outlined is-danger button-custom" type="submit" onclick="serverTest()">压测</button>
+            @endif
         </div>
 
         <div class="box">
@@ -114,29 +116,23 @@
         @endif
 
         {{-- 压力测试 --}}
-        <div class="box">
-            <strong>压力测试：</strong>
-            <hr>
-            <table class="table is-fullwidth is-narrow">
-                <tbody>
-                <tr>
-                    <td>总请求数</td>
-                    <td>
+        @if ($pressureTest)
+            <div class="box">
+                <strong>压力测试：</strong>
+                <hr>
+                <div class="columns">
+                    <div class="column">
                         <input class="input" type="text" id="total_requests_input" value="{{ old('total_requests') }}" placeholder="总请求数，默认100">
-                    </td>
-                </tr>
-                <tr>
-                    <td>并发量</td>
-                    <td>
+                    </div>
+                    <div class="column">
                         <input class="input" type="text" id="concurrency_input" value="{{ old('concurrency') }}" placeholder="并发量，默认10">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         {{-- 上次压测结果 --}}
-        @if (@$lastServerTestResult['requests_per_second'])
+        @if ($pressureTest && @$lastServerTestResult['requests_per_second'])
             <div class="box">
                 <strong>上次压测结果：</strong>
                 <hr>
@@ -202,7 +198,7 @@
         </div>
 
         {{-- 压力测试结果 --}}
-        @if (session('api_helper.response.status') == 200 && session('api_helper.pressure_test.command'))
+        @if ($pressureTest && session('api_helper.response.status') == 200 && session('api_helper.pressure_test.command'))
             <div class="box">
                 <strong>压测结果：</strong>
                 <hr>

@@ -20,6 +20,8 @@
 ## 更新日志
 
 ```php
+v1.4.7 压力测试调整为可选功能，默认关闭
+
 v1.4.6 压缩css文件
 
 v1.4.5 测试工具优化
@@ -65,6 +67,8 @@ cache_tag_prefix // 缓存前缀，默认为api_helper，建议不同项目设�
 cache_ttl // 缓存时长，默认120分钟，可根据项目需求自行设置
 
 api_base_url // 接口请求基础地址，默认为当前<host_name>，一般情况下不需要配置，若存在内外网不通的情况，可设置为相应内网地址
+
+api_pressure_test // v1.4.7 新增，是否开启压力测试功能，默认 false
 
 namespaces // 指定生成Api文档命名空间，数组，key为group，value为namespace，请确保namspace之间没有交集，否则小集合将被忽略
 ```

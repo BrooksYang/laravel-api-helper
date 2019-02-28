@@ -56,12 +56,17 @@ class DocController extends Controller
         $info = $this->getApiInfo($route);
         $params = $this->getApiParams($api->controller, $api->action);
 
-        // 获取上次压测结果
-        $prefix = config('api-helper.cache_tag_prefix');
-        $key = $info['method'] . '_' . str_replace('/', '_', $info['uri']);
-        $lastServerTestResult = Cache::tags($prefix . '_server_test')->get($key);
+        // 是否开启压力测试
+        $pressureTest = config('api-helper.api_pressure_test', false) === true;
 
-        return view('api_doc::show', compact('info', 'params', 'group', 'module', 'lastServerTestResult'));
+        // 获取上次压测结果
+        if ($pressureTest) {
+            $prefix = config('api-helper.cache_tag_prefix');
+            $key = $info['method'] . '_' . str_replace('/', '_', $info['uri']);
+            $lastServerTestResult = Cache::tags($prefix . '_server_test')->get($key);
+        }
+
+        return view('api_doc::show', compact('info', 'params', 'group', 'module', 'pressureTest', 'lastServerTestResult'));
     }
 
     /**

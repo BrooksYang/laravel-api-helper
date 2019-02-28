@@ -11,6 +11,9 @@ return [
     // Api Base Url
     'api_base_url'     => env('API_BASE_URL'),
 
+    // Enable Pressure Test
+    'api_pressure_test' => env('API_PRESSURE_TEST', false),
+
     // Available Namespaces（key: group, value: namespace）
     'namespaces'       => [
         'App' => 'App\Http\Controllers',
