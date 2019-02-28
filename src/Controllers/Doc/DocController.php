@@ -7,8 +7,8 @@ use BrooksYang\LaravelApiHelper\Traits\DocHelper;
 use BrooksYang\LaravelApiHelper\Traits\GuzzleHelper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use File;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 
 class DocController extends Controller
@@ -68,7 +68,8 @@ class DocController extends Controller
      * 发送请求
      *
      * @param Request $request
-     * @return array
+     * @return mixed
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function send(Request $request)
     {
@@ -84,17 +85,17 @@ class DocController extends Controller
 
         // 发送请求
         if (!empty($hasFile)) {
-            $data = $this->sendMultipartRequest($method, $url, $params);
+            $response = $this->sendMultipartRequest($method, $url, $params);
         } else {
-            $data = $this->sendRequest($method, $url, $params);
+            $response = $this->sendRequest($method, $url, $params);
         }
-        $data = @$data['error'] == 'GUZZLE_EXCEPTION' ? $data['msg'] : json_encode($data);
 
         // 压力测试
-        $response = $this->serverTest($request, $params, $method, $url, $token);
+        $pressureTest = $this->serverTest($request, $params, $method, $url, $token);
 
-        return back()->with('params', $data)
-            ->with('response', $response)
+        return back()
+            ->with('api_helper.response', $response)
+            ->with('api_helper.pressure_test', $pressureTest)
             ->withInput();
     }
 
