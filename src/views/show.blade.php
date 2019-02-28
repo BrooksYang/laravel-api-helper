@@ -173,20 +173,41 @@
 
         {{-- 返回结果 --}}
         <div class="box">
-            <strong>返回结果：</strong>
+            <div class="columns">
+                <div class="column">
+                    <strong>返回结果：</strong>
+                </div>
+
+                {{-- Http Status--}}
+                <div class="column">
+                    @if (session('api_helper.response'))
+                        <div class="level-right">
+                            Status:
+                            {{ session('api_helper.response.status') }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             <hr>
+
+            {{-- Response --}}
             <div class="content">
-                <pre><span id="code">{{ session('params') }}</span></pre>
+                @if (session('api_helper.response.status') != 200)
+                    {!! session('api_helper.response.message') !!}
+                @else
+                    <pre><span id="code">{!! session('api_helper.response.data') !!}</span></pre>
+                @endif
             </div>
         </div>
 
         {{-- 压力测试结果 --}}
-        @if (session('response.command'))
+        @if (session('api_helper.response.status') == 200 && session('api_helper.pressure_test.command'))
             <div class="box">
                 <strong>压测结果：</strong>
                 <hr>
                 <div class="content">
-                    <pre>{{ session('response.command') }}<hr>{{ session('response.report') }}</pre>
+                    <pre>{{ session('api_helper.pressure_test.command') }}<hr>{{ session('api_helper.pressure_test.report') }}</pre>
                 </div>
             </div>
         @endif
