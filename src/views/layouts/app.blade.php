@@ -11,7 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('vendor/api_doc/css/bulma.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/api_doc/css/bulma.min.css') }}" rel="stylesheet">
 
     {{-- Css --}}
     @yield('css')
