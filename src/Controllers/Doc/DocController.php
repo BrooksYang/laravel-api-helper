@@ -33,7 +33,7 @@ class DocController extends Controller
             $item['last_server_test_result'] = Cache::tags($prefix . '_server_test')->get($key);
         }
 
-        return view('api_doc::index', compact('items'));
+        return view('api_helper::index', compact('items'));
     }
 
     /**
@@ -66,7 +66,7 @@ class DocController extends Controller
             $lastServerTestResult = Cache::tags($prefix . '_server_test')->get($key);
         }
 
-        return view('api_doc::show', compact('info', 'params', 'group', 'module', 'pressureTest', 'lastServerTestResult'));
+        return view('api_helper::show', compact('info', 'params', 'group', 'module', 'pressureTest', 'lastServerTestResult'));
     }
 
     /**

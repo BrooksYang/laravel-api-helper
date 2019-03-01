@@ -1,4 +1,4 @@
-@extends('api_doc::layouts.app')
+@extends('api_helper::layouts.app')
 
 @section('css')
     <style>

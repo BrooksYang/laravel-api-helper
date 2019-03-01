@@ -1,7 +1,7 @@
-@extends('api_doc::layouts.app')
+@extends('api_helper::layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('vendor/api_doc/css/api-helper.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/api_helper/css/api-helper.css') }}">
 @endsection
 
 @section('content')
@@ -215,5 +215,5 @@
 @endsection
 
 @section('Js')
-    <script src="{{ asset('vendor/api_doc/js/api-helper.js') }}"></script>
+    <script src="{{ asset('vendor/api_helper/js/api-helper.js') }}"></script>
 @endsection

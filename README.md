@@ -18,6 +18,7 @@
 | Guzzlehttp |  >=6.3 |
 
 ## 更新日志
+>v1.5.1 文件结构调整
 
 >v1.5.0 测试工具优化 - 提供 Pretty、Raw、Preview 三种响应结果视图
 
@@ -55,9 +56,9 @@ composer require brooksyang/laravel-api-helper
 ```
 
 ## 配置
-打印配置文件，及css资源，该命令将生成config/api-helper.php，及/public/vendor/api_doc/css/bulma.css文件
+打印配置文件，及静态资源，该命令将生成 config/api-helper.php，及 /public/vendor/api_helper 文件夹
 ```php
-php artisan vendor:publish --tag=api-doc
+php artisan vendor:publish --tag=api-helper
 ```
 
 api-helper.php 配置项说明
