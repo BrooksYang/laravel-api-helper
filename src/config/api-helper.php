@@ -11,6 +11,9 @@ return [
     // Api Base Url
     'api_base_url'     => env('API_BASE_URL'),
 
+    // Enable Api Doc
+    'api_doc' => env('API_DOC', true),
+
     // Enable Pressure Test
     'api_pressure_test' => env('API_PRESSURE_TEST', false),
 

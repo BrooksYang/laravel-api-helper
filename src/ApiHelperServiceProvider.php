@@ -20,7 +20,9 @@ class ApiHelperServiceProvider extends ServiceProvider
         ], 'api-helper');
 
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+        if (config('api-helper.api_doc', true) !== false) {
+            $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+        }
 
         // Load views
         $this->loadViewsFrom(__DIR__ . '/views', 'api_helper');
