@@ -32,15 +32,15 @@ trait GuzzleHelper
         } catch (RequestException $exception) {
             return [
                 'status'  => $exception->getCode(),
-                'message' => $exception->getResponse()->getBody()->getContents(),
-                'data'    => null,
+                'message' => 'Error',
+                'content' => $exception->getResponse()->getBody()->getContents(),
             ];
         }
 
         // 返回数据
-        $data = (string) $response->getBody();
+        $content = (string) $response->getBody();
 
-        return compact('status', 'message', 'data');
+        return compact('status', 'message', 'content');
     }
 
     /**
@@ -77,14 +77,14 @@ trait GuzzleHelper
         } catch (RequestException $exception) {
             return [
                 'status'  => $exception->getCode(),
-                'message' => $exception->getResponse()->getBody()->getContents(),
-                'data'    => null,
+                'message' => 'Error',
+                'content' => $exception->getResponse()->getBody()->getContents(),
             ];
         }
 
         // 返回数据
-        $data = (string)$response->getBody();
+        $content = (string) $response->getBody();
 
-        return compact('status', 'message', 'data');
+        return compact('status', 'message', 'content');
     }
 }

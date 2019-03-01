@@ -1,25 +1,7 @@
 @extends('api_doc::layouts.app')
 
 @section('css')
-    <style>
-        span {
-            width: 60px;
-            margin-right: 5px;
-        }
-
-        .button-custom {
-            width: 100px;
-            margin-bottom: 15px;
-        }
-
-        /* pre content wrap */
-        pre {
-            white-space: pre-wrap!important; /* css-3 */
-            word-wrap: break-word!important; /* InternetExplorer5.5+ */
-            white-space: -moz-pre-wrap!important; /* Mozilla,since1999 */
-            white-space: -o-pre-wrap!important; /* Opera7 */
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('vendor/api_doc/css/api-helper.css') }}">
 @endsection
 
 @section('content')
@@ -189,52 +171,49 @@
 
             {{-- Response --}}
             <div class="content">
-                @if (session('api_helper.response.status') != 200)
-                    {!! session('api_helper.response.message') !!}
-                @else
-                    <pre><span id="code">{!! session('api_helper.response.data') !!}</span></pre>
-                @endif
-            </div>
-        </div>
 
-        {{-- 压力测试结果 --}}
-        @if ($pressureTest && session('api_helper.response.status') == 200 && session('api_helper.pressure_test.command'))
-            <div class="box">
-                <strong>压测结果：</strong>
-                <hr>
-                <div class="content">
+                {{-- 压力测试结果 --}}
+                @if ($pressureTest && session('api_helper.response.status') == 200 && session('api_helper.pressure_test.command'))
                     <pre>{{ session('api_helper.pressure_test.command') }}<hr>{{ session('api_helper.pressure_test.report') }}</pre>
+                    <hr>
+                @endif
+
+                {{-- Buttons --}}
+                @if (session('api_helper.response'))
+                    <div style="margin-bottom: 15px;">
+                        <span class="button is-primary is-small" id="button_pretty" onclick="formatResponse('pretty')">
+                            Pretty
+                        </span>
+
+                        <span class="button is-small" id="button_raw" onclick="formatResponse('raw')">
+                            Raw
+                        </span>
+
+                        <span class="button is-small" id="button_preview" onclick="formatResponse('preview')">
+                            Preview
+                        </span>
+                    </div>
+                @endif
+
+                {{-- Pretty --}}
+                <div id="pretty">
+                    <pre><span id="code">{{ session('api_helper.response.content') }}</span></pre>
+                </div>
+
+                {{-- Raw --}}
+                <div id="raw" style="display: none;">
+                    <pre>{{ session('api_helper.response.content') }}</pre>
+                </div>
+
+                {{-- Preview --}}
+                <div id="preview" style="display: none;">
+                    <span>{!! session('api_helper.response.content') !!}</span>
                 </div>
             </div>
-        @endif
+        </div>
     </form>
 @endsection
 
 @section('Js')
-    <script>
-
-        /**
-         * 压力文件上传显示文件名测试
-         */
-        function handleFileName(filename) {
-            let fileName = document.getElementById("beingUploadFilename");
-            fileName.innerHTML = filename;
-        }
-
-        // 格式化json
-        if (window["JSON"] && JSON["stringify"]) {
-            let code = document.getElementById("code");
-            if (code.innerHTML) {
-                code.innerHTML = JSON.stringify(JSON.parse(code.innerHTML), undefined, 2);
-            }
-        }
-
-        /**
-         * 压力测试
-         */
-        function serverTest() {
-            document.getElementById('total_requests_input').setAttribute('name', 'total_requests');
-            document.getElementById('concurrency_input').setAttribute('name', 'concurrency');
-        }
-    </script>
+    <script src="{{ asset('vendor/api_doc/js/api-helper.js') }}"></script>
 @endsection
