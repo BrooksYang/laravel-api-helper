@@ -17,7 +17,9 @@
             <a href="{{ url("api/docs/{$group}/{$module}") }}" class="button button-custom">接口列表</a>
             <button class="button is-outlined is-primary button-custom" type="submit">测试</button>
             @if ($pressureTest)
-                <button class="button is-outlined is-danger button-custom" type="submit" onclick="serverTest()">压测</button>
+                <button class="button is-outlined is-danger button-custom" type="submit" onclick="serverTest()">
+                    压测
+                </button>
             @endif
         </div>
 
@@ -52,7 +54,8 @@
                 </div>
                 </p>
                 <p class="control is-expanded">
-                    <input class="input" type="text" name="tokenForApiDoc" value="{{ session('tokenForApiDoc') }}" placeholder="请输入token">
+                    <input class="input" type="text" name="tokenForApiDoc" value="{{ session('tokenForApiDoc') }}"
+                           placeholder="请输入token">
                 </p>
             </div>
         </div>
@@ -104,10 +107,12 @@
                 <hr>
                 <div class="columns">
                     <div class="column">
-                        <input class="input" type="text" id="total_requests_input" value="{{ old('total_requests') }}" placeholder="总请求数，默认100">
+                        <input class="input" type="text" id="total_requests_input" value="{{ old('total_requests') }}"
+                               placeholder="总请求数，默认100">
                     </div>
                     <div class="column">
-                        <input class="input" type="text" id="concurrency_input" value="{{ old('concurrency') }}" placeholder="并发量，默认10">
+                        <input class="input" type="text" id="concurrency_input" value="{{ old('concurrency') }}"
+                               placeholder="并发量，默认10">
                     </div>
                 </div>
             </div>
@@ -180,18 +185,22 @@
 
                 {{-- Buttons --}}
                 @if (session('api_helper.response'))
-                    <div style="margin-bottom: 15px;">
-                        <span class="button is-primary is-small" id="button_pretty" onclick="formatResponse('pretty')">
-                            Pretty
-                        </span>
-
-                        <span class="button is-small" id="button_raw" onclick="formatResponse('raw')">
-                            Raw
-                        </span>
-
-                        <span class="button is-small" id="button_preview" onclick="formatResponse('preview')">
-                            Preview
-                        </span>
+                    <div class="field has-addons">
+                        <p class="control">
+                            <a class="button is-small is-primary" id="button_pretty" onclick="formatResponse('pretty')">
+                                Pretty
+                            </a>
+                        </p>
+                        <p class="control">
+                            <a class="button is-small" id="button_raw" onclick="formatResponse('raw')">
+                                Raw
+                            </a>
+                        </p>
+                        <p class="control">
+                            <a class="button is-small" id="button_preview" onclick="formatResponse('preview')">
+                                Preview
+                            </a>
+                        </p>
                     </div>
                 @endif
 
