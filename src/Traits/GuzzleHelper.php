@@ -22,7 +22,7 @@ trait GuzzleHelper
         $token = session('tokenForApiDoc');
 
         // 发送请求
-        $client = new Client(['headers' => ['Authorization' => "Bearer $token"]]);
+        $client = new Client(['headers' => ['Authorization' => "Bearer $token", 'Accept' => 'application/json']]);
 
         $status = 200;
         $message = 'Success';
