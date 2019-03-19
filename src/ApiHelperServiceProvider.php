@@ -2,11 +2,21 @@
 
 namespace BrooksYang\LaravelApiHelper;
 
+use BrooksYang\LaravelApiHelper\Middleware\RequestCounter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class ApiHelperServiceProvider extends ServiceProvider
 {
+    /**
+     * The application's route middleware.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [
+        'request.counter' => RequestCounter::class,
+    ];
+
     /**
      * Bootstrap the application services.
      *
@@ -52,6 +62,11 @@ class ApiHelperServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/config/api-helper.php', 'api-helper'
         );
+
+        // register route middleware.
+        foreach ($this->routeMiddleware as $key => $middleware) {
+            app('router')->aliasMiddleware($key, $middleware);
+        }
     }
 
     /**

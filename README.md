@@ -20,6 +20,7 @@
 ## 更新日志
 >v1.6.0 2019-03-19
 >- `新增` 支持资源路由（参数接收方式见「使用示例」）
+>- `新增` 内置接口访问统计（需启用 request.counter 中间件）
 
 >v1.5.4 2019-03-19
 >- `新增` 请求 api 设置 Accept 为 json
@@ -107,6 +108,7 @@ namespaces // 指定生成Api文档命名空间，数组，key为group，value�
 namespaces 配置示例
 ```php
 namespaces => [
+    'Helper' => 'BrooksYang\LaravelApiHelper\Controllers\BuiltIn', // v1.6.0 新增，内置接口访问统计
     'App'  => 'App\Http\Controllers', // 生效
     'Test' => 'App\Http\Controllers\Test', // 无效
     'Api'  => 'Api\Controllers' // 生效
@@ -130,6 +132,25 @@ namespaces => [
             |--XxxController // 生效
 ```
 以上配置，TestController被忽略，DemoController 生效，DeepController与DemoController同级生效，XxxController生效
+
+## 启用接口访问统计（可选）
+vim app/Http/Kernel，在 $middlewareGroups 中添加 'request.counter' 中间件
+```
+/**
+ * The application's route middleware groups.
+ *
+ * @var array
+ */
+protected $middlewareGroups = [
+    // ***
+    
+    'api' => [
+        'throttle:60,1',
+        'bindings',
+        'request.counter', // 启用「接口访问统计」中间件
+    ],
+];
+```
 
 ## 设置缓存驱动
 修改 .env 文件，将缓存驱动设置为redis（推荐）
@@ -193,6 +214,6 @@ http://<HOST_NAME>/api/docs
 
 ## TODO LIST
 - [x] 支持资源路由
-- [ ] 接口访问统计
+- [x] 接口访问统计
 - [ ] 记录接口访问日志
 - [ ] 返回参数自动生成文档

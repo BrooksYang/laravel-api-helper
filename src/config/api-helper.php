@@ -19,6 +19,7 @@ return [
 
     // Available Namespaces（key: group, value: namespace）
     'namespaces'       => [
+        'Helper' => 'BrooksYang\LaravelApiHelper\Controllers\BuiltIn',
         'App' => 'App\Http\Controllers',
     ],
 ];
