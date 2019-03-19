@@ -135,7 +135,7 @@ namespaces => [
 
 ## 启用接口访问统计（可选）
 vim app/Http/Kernel，在 $middlewareGroups 中添加 'request.counter' 中间件
-```
+```php
 /**
  * The application's route middleware groups.
  *
