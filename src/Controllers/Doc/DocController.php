@@ -80,7 +80,11 @@ class DocController extends Controller
     {
         $method = $request->input('methodForApiDoc');
         $baseUrl = trim(config('api-helper.api_base_url'), '/') ?: url('/');
-        $url = $baseUrl . '/' . $request->input('uriForApiDoc');
+
+        $uri = $request->input('uriForApiDoc');
+        $uri = $this->handleUri($request, $uri);
+        $url = "{$baseUrl}/{$uri}";
+
         $params = $request->except('_token', 'tokenForApiDoc', 'methodForApiDoc', 'uriForApiDoc', 'token', 'total_requests', 'concurrency');
         $token = $request->input('tokenForApiDoc');
         $request->session()->put('tokenForApiDoc', $token);
@@ -102,6 +106,32 @@ class DocController extends Controller
             ->with('api_helper.response', $response)
             ->with('api_helper.pressure_test', $pressureTest)
             ->withInput();
+    }
+
+    /**
+     * Handle Uri for Rest Api
+     *
+     * @param Request $request
+     * @param         $uri
+     * @return string
+     */
+    private function handleUri(Request $request, $uri)
+    {
+        if (strpos($uri, '{') === false || strpos($uri, '}') === false) {
+            return $uri;
+        }
+
+        $items = explode('/', $uri);
+
+        foreach ($items as &$item) {
+            if (strpos($item, '{') !== false && strpos($item, '}') !== false) {
+                $item = $request->input($item);
+            }
+        }
+
+        $uri = implode('/', $items);
+
+        return $uri;
     }
 
     /**
