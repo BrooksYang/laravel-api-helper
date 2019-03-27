@@ -60,11 +60,9 @@ class DocController extends Controller
         $pressureTest = config('api-helper.api_pressure_test', false) === true;
 
         // 获取上次压测结果
-        if ($pressureTest) {
-            $prefix = config('api-helper.cache_tag_prefix');
-            $key = $info['method'] . '_' . str_replace('/', '_', $info['uri']);
-            $lastServerTestResult = Cache::tags($prefix . '_server_test')->get($key);
-        }
+        $prefix = config('api-helper.cache_tag_prefix');
+        $key = $info['method'] . '_' . str_replace('/', '_', $info['uri']);
+        $lastServerTestResult = $pressureTest ? Cache::tags($prefix . '_server_test')->get($key) : null;
 
         return view('api_helper::show', compact('info', 'params', 'group', 'module', 'pressureTest', 'lastServerTestResult'));
     }
@@ -148,6 +146,7 @@ class DocController extends Controller
     {
         // 判断是否填写了压力测试参数
         if (!$request->has('total_requests') || !$request->has('concurrency')) {
+            $command = '';
             return compact('command');
         }
 

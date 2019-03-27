@@ -33,7 +33,9 @@ trait GuzzleHelper
             return [
                 'status'  => $exception->getCode(),
                 'message' => 'Error',
-                'content' => $exception->getResponse()->getBody()->getContents(),
+                'content' => $exception->getResponse()
+                    ? $exception->getResponse()->getBody()->getContents()
+                    : $exception->getMessage(),
             ];
         }
 
@@ -78,7 +80,9 @@ trait GuzzleHelper
             return [
                 'status'  => $exception->getCode(),
                 'message' => 'Error',
-                'content' => $exception->getResponse()->getBody()->getContents(),
+                'content' => $exception->getResponse()
+                    ? $exception->getResponse()->getBody()->getContents()
+                    : $exception->getMessage(),
             ];
         }
 
