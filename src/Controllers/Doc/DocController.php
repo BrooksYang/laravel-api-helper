@@ -4,7 +4,7 @@ namespace BrooksYang\LaravelApiHelper\Controllers\Doc;
 
 use BrooksYang\LaravelApiHelper\Facades\Doc;
 use BrooksYang\LaravelApiHelper\Traits\DocHelper;
-use BrooksYang\LaravelApiHelper\Traits\GuzzleHelper;
+use BrooksYang\LaravelApiHelper\Traits\RequestHelper;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Input;
 
 class DocController extends Controller
 {
-    use DocHelper, GuzzleHelper;
+    use DocHelper, RequestHelper;
 
     /**
      * api 列表
@@ -71,8 +71,8 @@ class DocController extends Controller
      * 发送请求
      *
      * @param Request $request
-     * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Exception
      */
     public function send(Request $request)
     {
@@ -87,15 +87,8 @@ class DocController extends Controller
         $token = $request->input('tokenForApiDoc');
         $request->session()->put('tokenForApiDoc', $token);
 
-        // 判断是否为Multipart请求
-        $hasFile = $request->allFiles();
-
         // 发送请求
-        if (!empty($hasFile)) {
-            $response = $this->sendMultipartRequest($method, $url, $params);
-        } else {
-            $response = $this->sendRequest($method, $url, $params);
-        }
+        $response = $this->sendRequest($method, $url, $params);
 
         // 压力测试
         $pressureTest = $this->serverTest($request, $params, $method, $url, $token);

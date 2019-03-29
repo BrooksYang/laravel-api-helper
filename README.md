@@ -4,7 +4,7 @@
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat
 
 ## 介绍
-该项目是基于Laravel 5.5的API文档生成工具，根据laravel路由及注释文件生成可视化api文档，并采用guzzlehttp进行调试。
+该项目是基于 Laravel 5.5 的API文档生成工具，根据 laravel 路由及注释文件生成可视化 api 文档，内置接口调试工具。
 
 ## Demo
 [点击访问](http://api-helper.brooksyang.cn/api/docs)
@@ -15,9 +15,13 @@
 |    PHP     |  >=7.0 |
 |   Laravel  |  >=5.5 |
 |   predis   |  >=1.1 |
-| Guzzlehttp |  >=6.3 |
+| Guzzlehttp（2.0版本已废弃） |  >=6.3 |
 
 ## 更新日志
+>v2.0.0 2019-03-29
+>- `重构` 移除 GuzzleHttp 依赖，接口测试改用 Laravel 内置的 Request 类请求
+>- `重构` 移除 ResponseHelper Trait
+
 >v1.6.0 2019-03-19
 >- `新增` 支持资源路由（参数接收方式见「使用示例」）
 >- `新增` 内置接口访问统计（需启用 request.counter 中间件）
