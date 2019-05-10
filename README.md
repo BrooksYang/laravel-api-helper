@@ -167,15 +167,6 @@ CACHE_DRIVER=redis
 CACHE_DRIVER=array
 ```
 
-## 异常处理（推荐）
-在/app/Exceptions/Handler.php文件的render方法中添加以下方法进行异常处理
-```php
-// 表单验证异常处理
-if ($exception instanceof \Illuminate\Validation\ValidationException) {
-    return response()->json(['code' => 11, 'msg' => $exception->errors(), 'data' => null]);
-}
-```
-
 ## 使用示例
 ```php
 use BrooksYang\LaravelApiHelper\Traits\ResponseHelper;
