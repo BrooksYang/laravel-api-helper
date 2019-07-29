@@ -19,7 +19,7 @@ Route::group(['prefix' => 'api', 'middleware' => ['web'], 'namespace' => 'Brooks
 
     // api请求测试
     Route::post('send', 'Doc\DocController@send');
-    
+
     // request counter
     Route::get('widgets/request-counter', 'BuiltIn\Widgets\WidgetController@counter');
 });

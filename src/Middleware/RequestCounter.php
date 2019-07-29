@@ -10,8 +10,9 @@ class RequestCounter
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -19,7 +20,7 @@ class RequestCounter
         $path = $request->path();
 
         $prefix = config('api-helper.cache_tag_prefix');
-        
+
         Redis::incr("{$prefix}.request_counter.{$path}");
 
         return $next($request);

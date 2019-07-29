@@ -31,15 +31,15 @@ class ApiHelperServiceProvider extends ServiceProvider
 
         // Load routes
         if (config('api-helper.api_doc', true) !== false) {
-            $this->loadRoutesFrom(__DIR__ . '/routes/api.php');
+            $this->loadRoutesFrom(__DIR__.'/routes/api.php');
         }
 
         // Load views
-        $this->loadViewsFrom(__DIR__ . '/views', 'api_helper');
+        $this->loadViewsFrom(__DIR__.'/views', 'api_helper');
 
         // Publish assets
         $this->publishes([
-            __DIR__ . '/assets' => public_path('vendor/api_helper'),
+            __DIR__.'/assets' => public_path('vendor/api_helper'),
         ], 'api-helper');
 
         // View Share
@@ -70,7 +70,7 @@ class ApiHelperServiceProvider extends ServiceProvider
     }
 
     /**
-     * Share Data
+     * Share Data.
      */
     public function viewComposer()
     {

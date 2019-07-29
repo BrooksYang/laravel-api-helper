@@ -7,13 +7,15 @@ use Illuminate\Http\Request;
 trait RequestHelper
 {
     /**
-     * Send Request
-     * 
+     * Send Request.
+     *
      * @param $method
      * @param $url
      * @param array $params
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function sendRequest($method, $url, $params = [])
     {

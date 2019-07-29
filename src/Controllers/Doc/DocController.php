@@ -16,10 +16,11 @@ class DocController extends Controller
     use DocHelper, RequestHelper;
 
     /**
-     * api 列表
+     * api 列表.
      *
      * @param $group
      * @param $module
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index($group = '', $module = '')
@@ -29,19 +30,20 @@ class DocController extends Controller
         // 获取上次压测结果
         $prefix = config('api-helper.cache_tag_prefix');
         foreach ($items as &$item) {
-            $key = $item['method'] . '_' . str_replace('/', '_', $item['uri']);
-            $item['last_server_test_result'] = Cache::tags($prefix . '_server_test')->get($key);
+            $key = $item['method'].'_'.str_replace('/', '_', $item['uri']);
+            $item['last_server_test_result'] = Cache::tags($prefix.'_server_test')->get($key);
         }
 
         return view('api_helper::index', compact('items'));
     }
 
     /**
-     * 获取api详情
+     * 获取api详情.
      *
      * @param $group
      * @param $module
      * @param $api
+     *
      * @return mixed
      */
     public function show($group, $module, $api)
@@ -61,8 +63,8 @@ class DocController extends Controller
 
         // 获取上次压测结果
         $prefix = config('api-helper.cache_tag_prefix');
-        $key = $info['method'] . '_' . str_replace('/', '_', $info['uri']);
-        $lastServerTestResult = $pressureTest ? Cache::tags($prefix . '_server_test')->get($key) : null;
+        $key = $info['method'].'_'.str_replace('/', '_', $info['uri']);
+        $lastServerTestResult = $pressureTest ? Cache::tags($prefix.'_server_test')->get($key) : null;
 
         return view('api_helper::show', compact('info', 'params', 'group', 'module', 'pressureTest', 'lastServerTestResult'));
     }
@@ -71,8 +73,10 @@ class DocController extends Controller
      * 发送请求
      *
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     *
      * @throws \Exception
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function send(Request $request)
     {
@@ -100,10 +104,11 @@ class DocController extends Controller
     }
 
     /**
-     * Handle Uri for Rest Api
+     * Handle Uri for Rest Api.
      *
      * @param Request $request
      * @param         $uri
+     *
      * @return string
      */
     private function handleUri(Request $request, $uri)
@@ -126,13 +131,14 @@ class DocController extends Controller
     }
 
     /**
-     * 服务器压力测试
+     * 服务器压力测试.
      *
      * @param Request $request
      * @param         $params
      * @param         $method
      * @param         $url
      * @param         $token
+     *
      * @return array
      */
     private function serverTest(Request $request, $params, $method, $url, $token)
@@ -140,6 +146,7 @@ class DocController extends Controller
         // 判断是否填写了压力测试参数
         if (!$request->has('total_requests') || !$request->has('concurrency')) {
             $command = '';
+
             return compact('command');
         }
 
@@ -159,6 +166,7 @@ class DocController extends Controller
         // 判断命令是否合法
         if (escapeshellcmd($token) != $token) {
             $report = '存在非法字符，已中断测试！';
+
             return compact('command', 'report', 'postParam');
         }
 
@@ -178,25 +186,29 @@ class DocController extends Controller
     }
 
     /**
-     * 缓存压测结果
+     * 缓存压测结果.
      *
-     * @param         $report
-     * @param         $method
+     * @param $report
+     * @param $method
      */
     private function cacheReport($report, $method)
     {
         $prefix = config('api-helper.cache_tag_prefix');
-        $key = $method . '_' . str_replace('/', '_', Input::get('uriForApiDoc'));
+        $key = $method.'_'.str_replace('/', '_', Input::get('uriForApiDoc'));
 
         // 提取吞吐率信息所在行数
         $line = 0;
         foreach ($report as $k => $item) {
             $arr = explode(':', $item);
-            if (@$arr[0] == 'Requests per second') $line = $k;
+            if (@$arr[0] == 'Requests per second') {
+                $line = $k;
+            }
         }
 
         // 判断是否提取到吞吐率信息所在行数
-        if (!$line) return;
+        if (!$line) {
+            return;
+        }
 
         // 提取关键信息
         preg_match('/(\d+)\.(\d+)/', @$report[$line], $requestsPerSecond);
@@ -209,15 +221,16 @@ class DocController extends Controller
             'time_per_request_concurrent' => @$timePerRequestConcurrent[0],
         ];
 
-        Cache::tags($prefix . '_server_test')->forever($key, $result);
+        Cache::tags($prefix.'_server_test')->forever($key, $result);
     }
 
     /**
-     * 拼接GET方式url
+     * 拼接GET方式url.
      *
      * @param $url
      * @param $method
      * @param $params
+     *
      * @return string
      */
     private function getFullUrl($url, $method, $params)
@@ -228,17 +241,18 @@ class DocController extends Controller
             foreach ($params as $key => $param) {
                 $getParam .= "$key=$param&";
             }
-            $url = $getParam ? $url . '?' . rtrim($getParam, '&') : $url;
+            $url = $getParam ? $url.'?'.rtrim($getParam, '&') : $url;
         }
 
         return $url;
     }
 
     /**
-     * 获取POST请求参数
+     * 获取POST请求参数.
      *
      * @param $method
      * @param $params
+     *
      * @return string
      */
     private function getPostParam($method, $params)

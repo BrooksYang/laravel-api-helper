@@ -9,21 +9,20 @@ use ReflectionClass;
 trait DocHelper
 {
     /**
-     * api文档namespace
+     * api文档namespace.
      *
      * @var string
      */
     private $docNamespace = 'BrooksYang\LaravelApiHelper\Controllers\Doc';
 
     /**
-     * 获取路由
+     * 获取路由.
      *
      * @return mixed
      */
     protected function getRoutes()
     {
-        return Cache::tags(config('api-helper.cache_tag_prefix') . '_routes')->remember('api_doc', config('api-helper.cache_ttl'), function () {
-
+        return Cache::tags(config('api-helper.cache_tag_prefix').'_routes')->remember('api_doc', config('api-helper.cache_ttl'), function () {
             $path = base_path();
 
             // 获取api路由
@@ -44,14 +43,15 @@ trait DocHelper
     }
 
     /**
-     * 获取所有模块
+     * 获取所有模块.
      *
      * @param $routes
+     *
      * @return array
      */
     protected function getModules($routes)
     {
-        return Cache::tags(config('api-helper.cache_tag_prefix') . '_modules')->remember('api_doc', config('api-helper.cache_ttl'), function () use ($routes) {
+        return Cache::tags(config('api-helper.cache_tag_prefix').'_modules')->remember('api_doc', config('api-helper.cache_ttl'), function () use ($routes) {
 
             // 筛选有模块的控制器
             $routes = $this->routesFilter($routes);
@@ -76,9 +76,10 @@ trait DocHelper
     }
 
     /**
-     * 获取模块
+     * 获取模块.
      *
      * @param $controller
+     *
      * @return mixed
      */
     protected function getModule($controller)
@@ -90,7 +91,7 @@ trait DocHelper
 
         // 筛选命名空间
         foreach ($namespaces as $group => $namespace) {
-            $namespace = rtrim($namespace, '\\') . '\\';
+            $namespace = rtrim($namespace, '\\').'\\';
 
             // 若不在namespace中，跳过
             if (strpos($controller, $namespace) === false) {
@@ -111,16 +112,17 @@ trait DocHelper
     }
 
     /**
-     * 获取指定命名空间下的api
+     * 获取指定命名空间下的api.
      *
      * @param        $routes
      * @param string $group
      * @param string $module
+     *
      * @return array
      */
     protected function getApiByModule($routes, $group = '', $module = '')
     {
-        return Cache::tags(config('api-helper.cache_tag_prefix') . '_api_doc')->remember("doc_for_{$group}_{$module}", config('api-helper.cache_ttl'), function () use ($routes, $group, $module) {
+        return Cache::tags(config('api-helper.cache_tag_prefix').'_api_doc')->remember("doc_for_{$group}_{$module}", config('api-helper.cache_ttl'), function () use ($routes, $group, $module) {
 
             // 筛选路由
             $routes = $this->routesFilter($routes, $group, $module);
@@ -136,9 +138,10 @@ trait DocHelper
     }
 
     /**
-     * 获取api信息
+     * 获取api信息.
      *
      * @param $route
+     *
      * @return array
      */
     protected function getApiInfo($route)
@@ -163,10 +166,11 @@ trait DocHelper
     }
 
     /**
-     * 获取api名称
+     * 获取api名称.
      *
      * @param $controller
      * @param $action
+     *
      * @return mixed
      */
     protected function getApiName($controller, $action)
@@ -183,10 +187,11 @@ trait DocHelper
     }
 
     /**
-     * 获取api参数
+     * 获取api参数.
      *
      * @param $controller
      * @param $action
+     *
      * @return array
      */
     public function getApiParams($controller, $action)
@@ -246,11 +251,12 @@ trait DocHelper
     }
 
     /**
-     * 筛选指定命名空间下的控制器
+     * 筛选指定命名空间下的控制器.
      *
      * @param $routes
      * @param $group
      * @param $module
+     *
      * @return array
      */
     private function routesFilter($routes, $group = '', $module = '')
@@ -265,12 +271,10 @@ trait DocHelper
 
         // 筛选路由
         $routes = array_filter($routes, function ($item) use ($namespaces, $group, $module) {
-
             $flag = false;
 
             foreach ($namespaces as $namespace) {
-
-                $namespace = rtrim($namespace, '\\') . '\\';
+                $namespace = rtrim($namespace, '\\').'\\';
 
                 // 若不在指定命名空间下，跳过
                 if (strpos($item, $namespace) === false) {
@@ -286,7 +290,7 @@ trait DocHelper
                 }
 
                 // 筛选 module
-                if ($module && strpos($controller, $module . '\\') === false) {
+                if ($module && strpos($controller, $module.'\\') === false) {
                     continue;
                 }
 

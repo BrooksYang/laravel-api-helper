@@ -10,7 +10,7 @@ class Doc
     use DocHelper;
 
     /**
-     * 获取路由
+     * 获取路由.
      *
      * @return mixed
      */
@@ -20,7 +20,7 @@ class Doc
     }
 
     /**
-     * 获取模块
+     * 获取模块.
      *
      * @return array
      */
@@ -33,10 +33,11 @@ class Doc
     }
 
     /**
-     * 获取指定模块下的api
+     * 获取指定模块下的api.
      *
      * @param string $group
      * @param string $module
+     *
      * @return array
      */
     public function api($group = '', $module = '')
@@ -47,13 +48,13 @@ class Doc
     }
 
     /**
-     * 获取api总数
+     * 获取api总数.
      *
      * @return int
      */
     public function total()
     {
-        $items = Cache::tags(config('api-helper.cache_tag_prefix') . '_api_doc')->get('doc_for_') ?: $this->api();
+        $items = Cache::tags(config('api-helper.cache_tag_prefix').'_api_doc')->get('doc_for_') ?: $this->api();
 
         return count($items);
     }
