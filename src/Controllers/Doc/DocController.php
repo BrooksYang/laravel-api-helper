@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Arr;
 
 class DocController extends Controller
 {
@@ -49,7 +50,7 @@ class DocController extends Controller
         $api = json_decode(base64_decode($api));
 
         $routes = $this->getRoutes();
-        $route = array_first($routes, function ($item) use ($api) {
+        $route = Arr::first($routes, function ($item) use ($api) {
             return in_array("$api->controller@$api->action", explode(':', $item));
         });
 
